@@ -13,7 +13,10 @@ namespace Authorize.Fody
 
         private string DllPath()
         {
-            return "System.Web.Http.dll";
+            var packageDir = Path.Combine(SolutionDirectoryPath, "packages");
+            var packageInfo = new DirectoryInfo(packageDir);
+            var webApi = packageInfo.GetDirectories("Microsoft.AspNet.WebApi.Core.*").LastOrDefault().FullName;
+            return Path.Combine(webApi, @"lib\net45", "System.Web.Http.dll");
         }
 
         public void Execute()
@@ -38,8 +41,11 @@ namespace Authorize.Fody
         {
             var dllPath = DllPath();
             var attributeName = "System.Web.Http.AuthorizeAttribute";
+
             var asm = AssemblyDefinition.ReadAssembly(dllPath);
             var attr = asm.MainModule.GetType(attributeName);
+            //var attr = module.GetType(attributeName);
+
             var ctor = attr.Methods.First(x => x.IsConstructor);
             var ctorReference = module.ImportReference(ctor);
 
