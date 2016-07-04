@@ -1,7 +1,6 @@
 ## Authorize.Fody
 
-Add `[Authorize]` attribute if method has `[HttpGet]` or `[HttpPost]`.
-** Target method must not return `Sysstem.Net.Http.HttpResponseMessage`
+Add `[Authorize]` attribute if method has `[HttpGet]` or `[HttpPost]` and method not return `Sysstem.Net.Http.HttpResponseMessage`.
 
 ## Instsall
 
