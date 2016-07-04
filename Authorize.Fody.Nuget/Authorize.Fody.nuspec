@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata minClientVersion="2.8">
+    <id>Authorize.Fody</id>
+    <version>$version$</version>
+    <title>Authorize.Fody</title>
+    <authors>wk</authors>
+    <owners>wk</owners>
+    <developmentDependency>true</developmentDependency>
+    <licenseUrl>https://github.com/wk-j/authorize-fody</licenseUrl>
+    <projectUrl>https://github.com/wk-j/authorize-fody</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://github.com/wk-j/authorize-fody</iconUrl>
+    <description>Add authorize attribute</description>
+    <summary />
+    <language>en-AU</language>
+    <tags>ILWeaving, Fody, Cecil, Authorize</tags>
+    <dependencies>
+      <dependency id="Fody"/>
+    </dependencies>
+  </metadata>
+</package>
