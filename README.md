@@ -2,7 +2,7 @@
 
 Add `[Authorize]` attribute if method has `[HttpGet]` or `[HttpPost]` and method not return `Sysstem.Net.Http.HttpResponseMessage`.
 
-## Instsall
+## Install
 
 > Install-Package Authorize.Fody
 
