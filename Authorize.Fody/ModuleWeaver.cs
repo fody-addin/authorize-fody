@@ -9,14 +9,27 @@ namespace Authorize.Fody
     {
         public ModuleDefinition ModuleDefinition { get; set; }
         public string SolutionDirectoryPath { get; set; }
+        public string ProjectDirectoryPath { get; set; }
 
 
-        private string DllPath()
+        private string GetDll(string root)
         {
-            var packageDir = Path.Combine(SolutionDirectoryPath, "packages");
+            var packageDir = Path.Combine(root, "packages");
             var packageInfo = new DirectoryInfo(packageDir);
             var webApi = packageInfo.GetDirectories("Microsoft.AspNet.WebApi.Core.*").LastOrDefault().FullName;
             return Path.Combine(webApi, @"lib\net45", "System.Web.Http.dll");
+        }
+
+        private string DllPath()
+        {
+            try
+            {
+                return GetDll(SolutionDirectoryPath);
+            }
+            catch
+            {
+                return GetDll(ProjectDirectoryPath);
+            }
         }
 
         public void Execute()
