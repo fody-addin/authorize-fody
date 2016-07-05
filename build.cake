@@ -13,6 +13,7 @@ Task("test")
 });
 
 Task("push")
+    .IsDependentOn("build")
     .Does(() => {
         var nupkg = new DirectoryInfo("./NugetBuild").GetFiles("*.nupkg").LastOrDefault();
         var package = nupkg.FullName;

@@ -27,7 +27,7 @@ namespace Authorize.Fody
 
                 if (packageInfo.Exists)
                 {
-                    var webApi = packageInfo.GetDirectories("Microsoft.AspNet.WebApi.Core.*").LastOrDefault().FullName;
+                    var webApi = packageInfo.GetDirectories("Microsoft.AspNet.WebApi.Core.5.*").LastOrDefault().FullName;
                     var path = Path.Combine(webApi, @"lib\net45", "System.Web.Http.dll");
                     return new Tuple<bool, string>(true, path);
                 }
