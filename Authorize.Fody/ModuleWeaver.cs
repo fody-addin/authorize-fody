@@ -25,13 +25,29 @@ namespace Authorize.Fody
 
                 LogInfo($">> Process | {packageInfo.FullName}");
 
-                if (packageInfo.Exists)
+                if (!packageInfo.Exists)
+                    return new Tuple<bool, string>(false, "");
+
+                var packageName = "Microsoft.AspNet.WebApi.Core.*";
+                var dllName = "System.Web.Http.dll";
+                var webApiInfo = packageInfo.GetDirectories(packageName).LastOrDefault();
+
+                if (webApiInfo == null)
                 {
-                    var webApi = packageInfo.GetDirectories("Microsoft.AspNet.WebApi.Core.5.*").LastOrDefault().FullName;
-                    var path = Path.Combine(webApi, @"lib\net45", "System.Web.Http.dll");
-                    return new Tuple<bool, string>(true, path);
+                    LogInfo($">> Cannot find | {packageName}");
+                    return new Tuple<bool, string>(false, "");
                 }
-                return new Tuple<bool, string>(false, "");
+
+                var webApi = webApiInfo.FullName;
+                var path = Path.Combine(webApi, @"lib\net45", dllName);
+
+                if (!File.Exists(path))
+                {
+                    LogInfo($">> Cannot find  | {path}");
+                    return new Tuple<bool, string>(false, "");
+                }
+
+                return new Tuple<bool, string>(true, path);
             }
             catch (Exception ex)
             {
@@ -55,7 +71,7 @@ namespace Authorize.Fody
             if (project.Item1) return project.Item2;
 
             var projectParent = GetDll(new DirectoryInfo(ProjectDirectoryPath).Parent.FullName);
-            if (projectParent.Item1) return project.Item2;
+            if (projectParent.Item1) return projectParent.Item2;
 
             return String.Empty;
         }
