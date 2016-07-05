@@ -17,24 +17,36 @@ namespace Authorize.Fody
 
         private Tuple<bool, string> GetDll(string root)
         {
-            var packageDir = Path.Combine(root, "packages");
-            var packageInfo = new DirectoryInfo(packageDir);
-
-            if (packageInfo.Exists)
+            try
             {
-                var webApi = packageInfo.GetDirectories("Microsoft.AspNet.WebApi.Core.*").LastOrDefault().FullName;
-                var path = Path.Combine(webApi, @"lib\net45", "System.Web.Http.dll");
-                return new Tuple<bool, string>(true, path);
-            }
+                var newRoot = root.TrimEnd('/').TrimEnd('\\');
+                var packageDir = Path.Combine(newRoot, "packages");
+                var packageInfo = new DirectoryInfo(packageDir);
 
-            return new Tuple<bool, string>(false, "");
+                LogInfo($">> Process | {packageInfo.FullName}");
+
+                if (packageInfo.Exists)
+                {
+                    var webApi = packageInfo.GetDirectories("Microsoft.AspNet.WebApi.Core.*").LastOrDefault().FullName;
+                    var path = Path.Combine(webApi, @"lib\net45", "System.Web.Http.dll");
+                    return new Tuple<bool, string>(true, path);
+                }
+                return new Tuple<bool, string>(false, "");
+            }
+            catch (Exception ex)
+            {
+                LogError($">> {ex.Message}");
+                LogError($">> {ex.StackTrace}");
+
+                return new Tuple<bool, string>(false, "");
+            }
         }
 
         private string DllPath()
         {
-            LogInfo($" >> Solution Path | {SolutionDirectoryPath}");
-            LogInfo($" >> Project Path | {ProjectDirectoryPath}");
-            LogInfo($" >> Current Path | ${new DirectoryInfo("./").FullName}");
+            LogInfo($">> Solution Path | {SolutionDirectoryPath}");
+            LogInfo($">> Project Path | {ProjectDirectoryPath}");
+            LogInfo($">> Current Path | {new DirectoryInfo("./").FullName}");
 
             var solution = GetDll(SolutionDirectoryPath);
             if (solution.Item1) return solution.Item2;

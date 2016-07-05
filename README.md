@@ -10,6 +10,10 @@ Add `[Authorize]` attribute if method has `[HttpGet]` or `[HttpPost]` and method
 
 > build.cmd -target build
 
+## Test
+
+> build.cmd -target test
+
 ## Publish nuget package
 
 > build.cmd -target push
