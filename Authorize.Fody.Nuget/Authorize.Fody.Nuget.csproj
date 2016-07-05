@@ -28,6 +28,9 @@
       <Name>Authorize.Fody</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Call.cs" />
+  </ItemGroup>
   <Target Name="Clean">
     <RemoveDir Directories="$(SolutionDir)NugetBuild" />
   </Target>
