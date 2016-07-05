@@ -12,8 +12,8 @@ namespace Authorize.Fody
         public string SolutionDirectoryPath { get; set; }
         public string ProjectDirectoryPath { get; set; }
 
-        // Will log an MessageImportance.High message to MSBuild. OPTIONAL
         public Action<string> LogInfo { get; set; }
+        public Action<string> LogError { get; set; }
 
         private Tuple<bool, string> GetDll(string root)
         {
@@ -42,17 +42,10 @@ namespace Authorize.Fody
             var project = GetDll(ProjectDirectoryPath);
             if (project.Item1) return project.Item2;
 
-            var dir = new DirectoryInfo("./");
-            while (dir.Parent != null)
-            {
-                LogInfo($" >> Current Dir | {dir.FullName}");
-                var current = GetDll(dir.FullName);
-                if (current.Item1) return current.Item2;
+            var projectParent = GetDll(new DirectoryInfo(ProjectDirectoryPath).Parent.FullName);
+            if (projectParent.Item1) return project.Item2;
 
-                dir = dir.Parent;
-            }
-
-            return "";
+            return String.Empty;
         }
 
         public void Execute()
@@ -76,6 +69,13 @@ namespace Authorize.Fody
         private void AddAttribute(ModuleDefinition module)
         {
             var dllPath = DllPath();
+
+            if (dllPath == String.Empty)
+            {
+                LogError(" >> Cannot find packages dir.");
+                return;
+            }
+
             var attributeName = "System.Web.Http.AuthorizeAttribute";
 
             var asm = AssemblyDefinition.ReadAssembly(dllPath);
